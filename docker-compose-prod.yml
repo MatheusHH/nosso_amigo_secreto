@@ -47,7 +47,7 @@ services:
     links:
       - app
     ports:
-      - "84:80"
+      - "80:80"
 
 
   box:
