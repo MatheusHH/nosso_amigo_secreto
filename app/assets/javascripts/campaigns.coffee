@@ -38,3 +38,31 @@ $(document).on 'turbolinks:load', ->
         error: (jqXHR, textStatus, errorThrown) ->
           Materialize.toast(jqXHR.responseText, 4000, 'red')
     return false
+
+  $.rails.allowAction = (link) ->
+    return true  unless link.attr("data-confirm")
+    $.rails.showConfirmDialog link
+    false
+
+  $.rails.confirmed = (link) ->
+    link.removeAttr "data-confirm"
+    link[0].click() # force click on element directly
+
+  $.rails.showConfirmDialog = (link) ->
+    html = undefined
+    message = undefined
+    message = link.attr("data-confirm")
+    html = "<div id=\"modal1\" class=\"modal\" style=\"z-index: 1003; display: block; opacity: 1; transform: scaleX(1); top: 10%;\"> <div class=\"modal-content\"><h4>" + message + "</h4></div><div class=\"modal-footer\"><a class=\"modal-action modal-close waves-effect waves-red btn-flat close\">Cancel</a><a class=\"modal-action modal-close waves-effect waves-green btn-flat confirm\">OK</a></div></div>"
+    $("body").append html
+    $("#modal1").modal complete: ->
+      $("#modal1").remove()
+
+    $("#modal1 .close").on "click", ->
+      $("#modal1").modal('close')
+
+    return $("#modal1 .confirm").on("click", ->
+      $.rails.confirmed link
+    )
+
+  
+

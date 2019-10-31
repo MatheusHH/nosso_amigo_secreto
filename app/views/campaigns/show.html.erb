@@ -99,7 +99,7 @@
     <div class="col s12 center">
       <div class="col s6 m3 offset-m3 l2 offset-l4">
         <%= form_for @campaign, method: 'delete', html: {class: 'remove_campaign'} do |f| %>
-          <button type='submit' class="waves-effect waves-light btn grey">Remover</button>
+          <button type='submit' data-confirm="<h5>Você tem Certeza ?</h5> " data-target="modal" class="waves-effect waves-light btn grey">Remover</button>
         <% end %>
       </div>
       <div class="col s6 m3 l3">
@@ -110,3 +110,6 @@
     </div>
   </div>
 </div>
+
+
+
