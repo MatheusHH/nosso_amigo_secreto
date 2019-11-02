@@ -21,7 +21,7 @@ class MembersController < ApplicationController
     @member.destroy
 
     respond_to do |format|
-      format.json { render json: true }
+      format.json { render status: 200, json: true }
     end
   end
 
