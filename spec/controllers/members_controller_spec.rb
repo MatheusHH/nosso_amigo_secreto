@@ -42,6 +42,12 @@ RSpec.describe MembersController, type: :controller do
       end
     end
 
+    context "User is not owner the campaign and member"
+      it "return http forbidden" do
+        member = create(:member)
+        put :destroy, params: {id: member.id}
+        expect(response).to have_http_status(:forbidden)
+      end
   end
 
   describe "PUT #update" do
@@ -50,7 +56,7 @@ RSpec.describe MembersController, type: :controller do
       request.env["HTTP_ACCEPT"] = 'application/json'
     end
 
-    context "Accepted new params " do
+    context "Accepted new params and Member and Campaign user are equal  " do
       before(:each) do
         campaign = create(:campaign, user: @current_user)
         member = create(:member, campaign_id: campaign.id)
@@ -61,9 +67,23 @@ RSpec.describe MembersController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
+
       it "Member has the new attributes" do
         expect(Member.last.name).to eq(@new_member_attributes[:name])
         expect(Member.last.email).to eq(@new_member_attributes[:email])
+      end
+    end
+
+    context "Accepted new params but Member and Campaign user are not equal  " do
+      before(:each) do
+        member = create(:member)
+        put :update, params: {id: member.id, member: @new_member_attributes}
+      end
+
+      it "return http forbidden" do
+        member = create(:member)
+        put :update, params: {id: member.id, member: @new_member_attributes}
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
